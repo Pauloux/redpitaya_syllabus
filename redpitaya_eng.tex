@@ -1552,10 +1552,10 @@ the kernel version with the one running on the board is mandatory. Doing so is a
 on the embedded board the Linux configuration found in {\tt /proc/configs.gz}, copy this file in the
 {\tt .config} configuration file of the kernel being compiled by Buildroot, run {\tt make linux-menuconfig}
 to tell Buildroot of the update, and finally {\tt make} from the top Buildroot location to recompile
-the full kernel and dependencies. Once the compilaiton is completed, the module we will compile from now
+the full kernel and dependencies. Once the compilation is completed, the module we will compile from now
 on will be compatible with the kernel running on the board.}}
 
-The module is linked to the kernel with {\tt insmod mymod.ko} and removied with {\tt rmmod mymod}. The list
+The module is linked to the kernel with {\tt insmod mymod.ko} and removed with {\tt rmmod mymod}. The list
 of modules linked to the kernel is displayed with {\tt lsmod}. The messages from the kernel, including its modules,
 are displayed on the console (in the case of the Red Pitaya, on the serial port) or in the kernel logs displayed
 with {\tt dmesg} or {\tt cat /var/log/messages} (or {\tt /var/log/syslog}).
