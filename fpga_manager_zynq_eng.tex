@@ -1,0 +1,136 @@
+% \section{Flasher un ZYNQ avec l'infrastructure FPGA}
+
+\subsection{Generating the encrypted bitstream}
+
+The default behavious of Vivado is to generate a bistream file with the {\tt .bit} 
+extension. The FPGA Manager expects another format with the appropriate header. Converting
+from {\tt .bit} to {\tt .bit.bin} is achieved with the {\tt bootgen} tool provided with
+the Vivado SDK.
+
+This tool expects a configuration file (called here {\tt filename.bif}) with the {\tt .bif} 
+extension as simple as: 
+\begin{lstlisting}
+all:
+{
+  bitstream_name.bit
+}
+\end{lstlisting}
+
+which is provided as argument to {\tt bootgen}:
+\begin{lstlisting}[language=bash]
+$VIVADO_SDK/bin/bootgen -image filename.bif -arch zynq -process_bitstream bin
+\end{lstlisting}
+
+Following the execution of this command, a file named {\tt bitstream\_name.bit.bin} has been
+created in the current directory.
+
+\subsection{Configuring the FPGA through {\tt fpga\_manager}}
+
+The {\tt .bit.bin} file must be copied/moved to the {\tt /lib/firmware} directory.
+
+In order to tell the driver that the {\tt PL} must be configured and which bitstream
+is to be used, the following command is used:
+\begin{lstlisting}[language=bash]
+echo "bitstream_name.bit.bin" > /sys/class/fpga_manager/fpga0/firmware
+\end{lstlisting}
+leading to the display of the line
+\begin{lstlisting}[language=bash]
+fpga_manager fpga0: writing nom_du_bitstream.bit.bin to Xilinx Zynq FPGA Manager
+\end{lstlisting}
+in the console or the kernel log, and the LED connected to {\tt Prog done} must
+switch on (blue LED on the Red Pitaya).
+
+\subsection{Using a devicetree overlay for configuring the FPGA}
+
+As was the case with the previous solution, the bitstream must be located in
+{\tt /lib/firmware}.
+
+The benefit of this method over the previous one is that when the design includes IPs
+communicating with the processor, the {\em devicetree} tells the kernel which drivers
+to load. This driver is provided as a kernel module to be inserted when the bitstream
+is used to configure the FPGA. The overlay overloads the {\tt fpga\_full} node definition 
+by providing simultaneously the bistream name as well as the identifier of the dedicated
+driver to be loaded for this application.
+
+Without getting in all the details of the overlay format, the following example
+will allow to:
+\begin{itemize}
+\item modify the {\tt fpga\_full} node definition, {\tt target} attribute, telling
+{\tt fpga\_manager} the name of the binary file to be used for configuring the
+PL through the {\tt firmware-name} attribute;
+\item add a node defining the drivers needed to control the PL from the PS leading
+to the module being loaded. In the current example the associated driver is
+called {\tt gpio\_ctl} ({\tt compatible} field), and the base address for sharing
+information between PS and PL (0x43C00000) is provided, as well as the size (0x1f) 
+through the {\tt reg} attribute.
+\end{itemize}\vspace{0.3cm}
+ 
+\begin{lstlisting}
+/dts-v1/;
+/plugin/;
+/ {
+    compatible = "xlnx,zynq-7000";
+    fragment@0 {
+        target = <&fpga_full>;
+        #address-cells = <1>;
+        #size-cells = <1>;
+        __overlay__ {
+            #address-cells = <1>;
+            #size-cells = <1>;
+
+            firmware-name = "top_redpitaya_axi_gpio_ctl.bin";
+
+            gpio1: gpio@43C00000 {
+                compatible = "gpio_ctl";
+                reg = <0x43C00000 0x0001f>;
+                gpio-controller;
+                #gpio-cells = <1>;
+                ngpio= <8>;
+            };
+        };
+    };
+};
+
+\end{lstlisting}
+
+This file must be compiled using the following command:
+\begin{lstlisting}
+/somewhere/buildroot/output/host/usr/bin/dtc -@ -I dts -O dtb -o ${FILENAME}.dtbo ${FILENAME}.dts
+\end{lstlisting}
+\noindent with:
+\begin{itemize}
+\item {\tt -@} to generate symbols to be dynamically loaded when 
+inserting the module
+\item {\tt -I dts} to define the kind of input file (DeviceTree Source);
+\item {\tt -O dtb} to define the kind of output file (DevideTree Binary);
+\item {\tt -o} the output filename.
+\end{itemize}
+
+Loading the file into the memory requires two steps:
+\begin{enumerate}
+\item creating a directory that will hold the overlay:
+\begin{lstlisting}[language=bash]
+mkdir /sys/kernel/config/device-tree/overlays/toto
+\end{lstlisting}
+will automaticall create a whole set of files in this directory:
+\begin{lstlisting}[language=bash]
+redpitaya> ls -l /sys/kernel/config/device-tree/overlays/toto/
+total 0
+-rw-r--r--    1 root     root             0 Jan  1 00:04 dtbo
+-rw-r--r--    1 root     root          4096 Jan  1 00:04 path
+-r--r--r--    1 root     root          4096 Jan  1 00:04 status
+\end{lstlisting}
+\item loading the overlay in the {\em devicetree}:
+\begin{lstlisting}[language=bash]
+cat gpio_red.dtbo > /sys/kernel/config/device-tree/overlays/toto/dtbo
+\end{lstlisting}
+will configure the FPGA by transfering the bitstram, load the driver by inserting the associated
+module identified through the ``compatible'' argument which must match the corresponding
+field in the kernel module.
+\end{enumerate}
+
+The modifications induced by the overlay can be canceled to return to the initial
+devicetree state by deleting the directory holding the overlay: 
+\begin{lstlisting}[language=bash]
+rmdir /sys/kernel/config/device-tree/overlays/toto
+\end{lstlisting}

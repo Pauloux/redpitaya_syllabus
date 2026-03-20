@@ -1,0 +1,24 @@
+static ssize_t
+gpio_simple_show(struct device *dev, struct device_attribute *attr, char *buf)
+{
+        return sprintf(buf, "%d\n", gpio_get_value(gpio));
+}
+
+static DEVICE_ATTR(value, 0444, gpio_simple_show, NULL);
+
+static int gpio_simple_probe(struct platform_device *pdev)
+{ 
+	err = device_create_file(&pdev->dev, &dev_attr_value);
+	if (err < 0)
+		goto err_free_irq;
+
+	return 0;
+  [...]
+}
+
+static int gpio_simple_remove(struct platform_device *pdev) 
+{
+	device_remove_file(&pdev->dev, &dev_attr_value);
+  [...]
+}
+
