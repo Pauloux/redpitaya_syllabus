@@ -530,18 +530,25 @@ detailed at \url{https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/189530183
 Notice that compiling all of {\tt qemu} is not needed but that after adding the devicetree
 compiler with \verb~git submodule update --init dtc~ we will only compile the wanted target,
 namely \\
-\verb~$./configure --target-list="aarch64-softmmu" --enable-fdt --disable-kvm --disable-xen~
+% 260327 \verb~$./configure --target-list="aarch64-softmmu" --enable-fdt --disable-kvm --disable-xen~
+\verb~$./configure --target-list="arm-softmmu" --disable-werror --enable-fdt --disable-kvm --disable-xen~
 
 Thanks to the compilation of the binary resulting from the archive provided by Xilinx at
 \url{https://github.com/Xilinx/qemu} as described below, we end up with 
-{\tt aarch64-softmmu/qemu-system-aarch64} with the support of the {\tt arm-generic-fdt-7series}
+{\tt qemu-system-arm} with the support of the {\tt arm-generic-fdt-7series}
 machine whose Ethernet interface is detected as {\tt eth0}. The command line to launch 
 {\tt qemu} with such a functionality is
+%\begin{verbatim}
+%sudo .../aarch64-softmmu/qemu-system-aarch64 -append "console=ttyPS0,115200 root=/dev/mmcblk0 \
+%rw earlyprintk" -M arm-generic-fdt-7series -machine linux=on -smp 2 -m 1024  -serial mon:stdio \
+%-dtb zynq-red_pitaya.dtb -nographic -kernel zImage  -sd rootfs.ext4  -net nic -net nic -net nic \
+%-net nic -net tap,downscript=no
+%\end{verbatim}
 \begin{verbatim}
-sudo .../aarch64-softmmu/qemu-system-aarch64 -append "console=ttyPS0,115200 root=/dev/mmcblk0 \
+sudo .../qemu-system-arm -append "console=ttyPS0,115200 root=/dev/mmcblk0 -boot mode=5 \
 rw earlyprintk" -M arm-generic-fdt-7series -machine linux=on -smp 2 -m 1024  -serial mon:stdio \
--dtb zynq-red_pitaya.dtb -nographic -kernel zImage  -sd rootfs.ext4  -net nic -net nic -net nic \
--net nic -net tap,downscript=no
+-dtb zynq-red_pitaya.dtb -nographic -kernel zImage -initrd rootfs.cpio.gz \
+-net nic -net nic -net nic -net nic -net tap,downscript=no
 \end{verbatim}
 
 \noindent
@@ -1039,6 +1046,8 @@ architectures (x86, most ARM, RISC-V) are little-endian, hence requiring the con
 
 For a UDP server:
 \begin{lstlisting}[language=C,basicstyle=\footnotesize\ttfamily]
+#include <unistd.h>
+#include <strings.h>
 #include <sys/socket.h>
 #include <resolv.h>
 #include <arpa/inet.h>
