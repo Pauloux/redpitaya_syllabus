@@ -126,7 +126,7 @@ options (FPU, SIMD instructions),
 Several options were available when considering which development framework to use with
 such a powerful processor as the Zynq fitted on the Red Pitaya: the microprocessor is recent
 enough that dedicated functionalities of the Linux kernel must be tailored to the targeted
-plaform, most significantly accessing the FPGA programmable logic (PL) located next to the 
+platform, most significantly accessing the FPGA programmable logic (PL) located next to the 
 general purpose dual-processor processing system (PS). Xilinx, manufacturer of the Zynq, has
 updated a dedicated development branch of the Linux kernel in parallel to the official branch.
 At the moment, only the Xilinx branch, named {\tt linux-xlnx}, allows to configure the FPGA, 
@@ -137,7 +137,7 @@ an official kernel without FPGA support, or the divergent Xilinx kernel without 
 with an uncertain long term evolution and availability. Hence in this document two toolchain 
 compilations are addressed, one using the Xilinx Linux kernel {\bf with FPGA and Devicetree Overlay
 (DTBO)} support, and the other one with Xenomai support relying on a mainline kernel but hence
-{\bf not supporting the dyanamic devicetree update mechanism of the DTBO}.
+{\bf not supporting the dynamic devicetree update mechanism of the DTBO}.
 % Hoping for a future merge of the
 %{\tt linux-xlnx} branch with the official kernel, and considering the size of Xilinx which should 
 %guarantee a certain continuity of developments, we have chosen to integrate the Linux kernel in 
@@ -187,7 +187,7 @@ git clone https://github.com/trabucayre/redpitaya.git
 \end{minipage}} 
 
 \noindent
-which cretes a {\tt redpitaya} directoty holding the necessary files. We must tell 
+which creates a {\tt redpitaya} directory holding the necessary files. We must tell 
 {\tt buildroot} where these additional files are located: this is achieved with the
 environment variable {\tt BR2\_EXTERNAL}. Either this variable can be defined with the
 absolute path leading to the {\tt redpitaya} directory, or execute the {\tt sourceme.ggm} script
@@ -223,7 +223,7 @@ The following lines might {\bf damage any storage medium} if the wrong periphera
 Alway {\bf check} the name of the peripheral associated with the SD card (\verb~dmesg | tail~) 
 before launching the {\tt dd} command.
 
-The image resulting from the compilation sequence is transfered to the SD card with\\
+The image resulting from the compilation sequence is transferred to the SD card with\\
 \colorbox{lightgray}{\begin{minipage}{0.9\textwidth}
 sudo dd if=output/images/sdcard.img of=/dev/sdc
 \end{minipage}} 
@@ -237,8 +237,8 @@ compatible with the Linux SCSI driver) or {\tt /dev/mmcblk0} (case of an interna
 last argument of this command, will be {\bf definitely} lost. Always check twice the name of
 the target periperal the Buildroot image is written to.}}
 
-Once the image has been transfered to the SD card, we observe two partitions on the mass
-storage medium: the first one formated as VFAT (compatible with Microsoft Windows) holding the
+Once the image has been transferred to the SD card, we observe two partitions on the mass
+storage medium: the first one formatted as VFAT (compatible with Microsoft Windows) holding the
 devicetree description, the Linux kernel, and the bootloader, and the second one holding the 
 GNU/Linux filesystem. This second partition size is exactly the one provided as argument in
 the Buildroot options {\tt .config} for storing the operating system files, and little space
@@ -249,7 +249,7 @@ the second partition size with
 \item delete the partition using {\tt fdisk}: lauch the program on the host computer as
 {\tt root} administrator, display the current configuration (which will be needed below) with
 {\tt p}, then {\tt d} to erase partition 2,
-\item re-create this partitiion but this time extending to the whole space available on the
+\item re-create this partition but this time extending to the whole space available on the
 card: {\tt n} to create a new partition, {\tt p} for a primary partition, provide the first
 sector address as was just displayed earlier (in the screenshot below, this first sector address
 is 32769), and accept the default selection to use the whole available space. Conclude with
@@ -277,7 +277,7 @@ Device     Boot Start     End Sectors  Size Id Type
 }
 
 Asynchronous (RS232-compatible) link emulation over the USB port located in the middle
-of the printed circuit board is functional: launch {\tt minicom} after connecting a USB-micr B
+of the printed circuit board is functional: launch {\tt minicom} after connecting a USB-micro B
 cable, tuned to a 115200 baudrate, 8N1. A prompt stating \verb~redpitaya>~ should appear
 upon hitting the ENTER key.
 
@@ -293,7 +293,7 @@ The network configuration between host and target is handled by the interface co
 command {\tt ifconfig} to assign a logic address (Internet Protocol -- IP) to a physical interface 
 (defined through its
 MAC address) and create a point to point link between computers of a sub-network and their
-gateway. This gateway is in charge of transfering data packets towards computers located outside
+gateway. This gateway is in charge of transferring data packets towards computers located outside
 the sub-network, or even towards the internet if the targeted address is not within the
 subnet. The command to define the routing table is {\tt route}: we shall not need to specify these
 routing tables manually in the simple case of the point to point communication of the Red Pitaya
@@ -336,7 +336,7 @@ ip link set dev eth0 up
 \end{verbatim}
 
 {\color{red}The consistent network configuration between two computers is validated
-uwing {\tt ping IP\_dest} requesting an answer ({\tt ping}) from the remote computer
+using {\tt ping IP\_dest} requesting an answer ({\tt ping}) from the remote computer
 with IP address {\tt IP\_dest}.}
 
 {\color{red}Once a network configuration is completed and manually validated, it can be
@@ -355,7 +355,7 @@ was already configured, it might be needed to cancel this previous configuration
 {\tt ifdown eth0}. If such a configuration is also used on the PC, make sure the Network Manager
 is not conflicting with {\tt /etc/network/interfaces}: Network Manager can be told not to mess
 with interfaces defined in {\tt /etc/network/interfaces} by stating {\tt managed=false} 
-in {\tt /etc/NetworkManager/NetworkManager.conf} of the PC Linux distribution.
+in \\ {\tt /etc/NetworkManager/NetworkManager.conf} of the PC Linux distribution.
 
 %Sur Redpitaya, u-boot se charge de fournir la configuration par d\'efaut de
 %l'interface eth0 lors du d\'emarrage de la carte. La configuration de
@@ -417,7 +417,7 @@ with information such as
 {\tt nameserver 194.57.91.200 \\
 nameserver 194.57.91.201}\\
 with 194.47.91.20\{0,1\} the domain name servers of Universit\'e de 
-Franche Comt\'e will solve the issue. On a differente site, the DNS address will be found
+Franche Comt\'e will solve the issue. On a different site, the DNS address will be found
 by looking into the {\tt /etc/resolv.conf} of a local PC. A generic solution is
 to selected {\tt 9.9.9.9} as DNS\footnote{\url{https://www.quad9.net/}}.
 server address
@@ -468,10 +468,10 @@ We only briefly mention the ability to use the PC as a gateway that translates t
 Red Pitaya IP requests and broadcast towards the targeted server on the internet: this
 capability will not be used at first and can be skipped if not needed. The tool for
 achieving such address translation is called {\tt iptables}: a configuration example
-for transfering all packets between {\tt eth0} and {\tt eth1} interfaces of the host PC is
-provided below. {\color{red}This configuation only makes sense on the PC where we assume
+for transferring all packets between {\tt eth0} and {\tt eth1} interfaces of the host PC is
+provided below. {\color{red}This configuration only makes sense on the PC where we assume
 that {\tt eth0} is connected to the subnetwork linked to the gateway allowing to reach the
-internet, and {\tt eth1} is connected to the subnetwork holding the la Red Pitaya. These commands
+internet, and {\tt eth1} is connected to the subnetwork holding the Red Pitaya. These commands
 all require administration ({\tt root}) credentials.}
 
 \begin{verbatim}
@@ -555,7 +555,7 @@ rw earlyprintk" -M arm-generic-fdt-7series -machine linux=on -smp 2 -m 1024  -se
 with the whole command launched from Buildroot's {\tt output/images} directory to avoid filling
 the full path of all the files (devicetree {\tt zynq-red\_pitaya.dtb}, root filesystem 
 {\tt rootfs.ext4}, Linux kernel {\tt zImage}). Notice that this command must be launched as
-{\bf administator (root) on the PC} in order to be allowed to create the {\tt tap0} network 
+{\bf administrator (root) on the PC} in order to be allowed to create the {\tt tap0} network 
 interface on the host.
 
 {\color{red}Once the virtual Red Pitaya launched in {\tt qemu-system-aarch64}, we observe with
@@ -572,7 +572,7 @@ address. Once this configuration is completed on the host and the target, a succ
 validates the proper operation of the link.
 }
 
-Figure \ref{rpqemu} demontrates the configuration of the {\tt eth0} interface when emulating the
+Figure \ref{rpqemu} demonstrates the configuration of the {\tt eth0} interface when emulating the
 Red Pitaya (address 192.168.0.10) in {\tt qemu}, consistent with the {\tt tap0} interface created
 and configured on the host (same sub-net 192.168.0.x with the PC arbitrarily assigned the 
 192.168.0.5 address) and the ability of a web client running on the host to access the
@@ -581,7 +581,7 @@ and configured on the host (same sub-net 192.168.0.x with the PC arbitrarily ass
 \begin{figure}[h!tb]
 \includegraphics[width=\linewidth]{redpitaya_qemu.png}
 \caption{Top-left the guest: Xilinx {\tt qemu} emulating the Red Pitaya. Bottom-left the web 
-client executed on the host and connecter to the web server running on the guest. Bottom-right the
+client executed on the host and connected to the web server running on the guest. Bottom-right the
 host network configuration created when launching {\tt qemu} with the {\tt -net tap} option.}
 \label{rpqemu}
 \end{figure}
@@ -595,7 +595,7 @@ to the configuration visible on Fig. \ref{rpqemu}) without performance degradati
 sharing public cryptographic keys, but with information circulating un-encrypted over the
 network.
 
-Files can be transfered from host to target using {\tt scp}. Furthermore, NFS is also functional
+Files can be transferred from host to target using {\tt scp}. Furthermore, NFS is also functional
 in this framework, as long as a functional TCP/IP link exists between host and guest and that
 the host directory to be shared has been defined by including the guest IP address in
 {\tt /etc/exports} (see previously section \ref{nfsexport}).
@@ -627,7 +627,7 @@ is displayed when typing the Red Pitaya IP address in the host web browser.
 
 Further interaction with hardware will require the ability to dynamically analyze the URL arguments
 and act accordingly, hence launching a script on the Red Pitaya when requested by the host web browser.
-Indeed, CGI ({\em Common Gateway Interface}) allows for dyanamically generating web pages
+Indeed, CGI ({\em Common Gateway Interface}) allows for dynamically generating web pages
 by executing a script generating HTML sentences that can be read by the client. The protocol
 specification, \url{http://www.ietf.org/rfc/rfc3875.txt}, indicates the means for sharing information
 between client and server.
@@ -684,9 +684,9 @@ that was launched manually by finding its identifier with the {\tt ps} command.
 \fbox{\parbox{\linewidth}{
 \includegraphics[width=.7cm]{danger} %\danger 
 Never run services with administration privileges ({\tt root}). Even if such 
-a configuration makes accessing hardware resources much easier, it break unix security
+a configuration makes accessing hardware resources much easier, it break Unix security
 rules based on the clear separation between services (examples of poor web server
-configration exploits: {\em Exploiting Network Surveillance Cameras Like a Hollywood Hacker}, 
+configuration exploits: {\em Exploiting Network Surveillance Cameras Like a Hollywood Hacker}, 
 Black Hat 2013, at \url{https://www.youtube.com/watch?v=B8DjTcANBx0}).  Here, the web server
 is run as user and group {\tt www-data} which have no administration rights so that a security
 failure in the web server would not lead to a security breach in the whole system.}}
@@ -775,7 +775,7 @@ For accessing GPIOs, a driver implements {\tt /sys/class/gpio}
 \footnote{make sure to activate such functionalities in the kernel configuration with
 {\tt Device Drivers}$\rightarrow${\tt GPIO Support}$\rightarrow${\tt /sys/class/gpio/... 
 (sysfs interface)}}. One feature of {\tt /sys} is to communicate through human readable 
-sentences (as opposed to binary valus shared with peripherals accessed through {\tt /dev}).
+sentences (as opposed to binary values shared with peripherals accessed through {\tt /dev}).
 
 \begin{framed}
 \noindent{\bf Kernel versions $\geq6$ (v.s 4., 5.x)}
@@ -783,13 +783,13 @@ sentences (as opposed to binary valus shared with peripherals accessed through {
 Practically, the {\tt gpiolib} drivers assumes that a digital port exposes at most
 32 input-output pins. Hence, the index of pin {\tt n} on port {\tt P} is 
 {\tt P}$\times 32+${\tt n}, with port A indexed as 0, B indexed as 1 and so on. In the case
-of the Red Pitaya, pins refered to as MIO are indexed starting with the value 906 in kernels
+of the Red Pitaya, pins referred to as MIO are indexed starting with the value 906 in kernels
 prior to 6, and with values starting with 512 for kernels 6.x. Hence,
 MIO0 is indexed as 906 on pre-6 kernel and 512 on the 6.x kernel, and MIO7 is indexed as 913 on
 pre-6 kernel and as 519 on 6.x kernels: the two LEDs -- orange and red -- are connected
 to these two pins. We demonstrate control of these peripherals with the following sequence.
 
-In a first step, we request control of th resource with 
+In a first step, we request control of the resource with 
 {\footnotesize
 \begin{verbatim}
 redpitaya> echo "906" > /sys/class/gpio/export # for kernel < 6, 512+ otherwise
@@ -891,7 +891,7 @@ redpitaya> echo "0" > /sys/class/gpio/gpio512/value
 
 Now that we understand access to the GPIO and LED hardware from the shell, this knowledge
 is transposed to the CGI script. Be aware though that the main challenge will be ownership
-of the resources and being allowed to access hardware as non-administator user.
+of the resources and being allowed to access hardware as non-administrator user.
 
 A basic example of a functional CGI script is provided below, which requires to understand
 the last line to refer to the section concerning hardware access at \ref{acces_led}, as
@@ -955,7 +955,7 @@ leading to the creation of a directory holding the pseudo-files for handling pin
 We observe the configuration of MIO0 and MIO7 as interfaces led8 and led9 respectively
 in the devicetree section found in {\tt redpitaya/board/redpitaya/patches/linux/xilinx-v2024.1/0002-redpitaya12-add\_devicetree.patch}
 % redpitaya/board/redpitaya/zynq-red\_pitaya.dts} 
-of {\tt BR2\_EXTERNAL} defining the Red Pitaya peripherals:
+of \\ {\tt BR2\_EXTERNAL} defining the Red Pitaya peripherals:
 
 {\footnotesize
 \begin{verbatim}
@@ -1084,7 +1084,7 @@ Notice how the {\tt socket()} argument was switched from {\tt SOCK\_STREAM} to {
 testing, {\tt netcat} is used with the {\tt -u} argument for UDP followed by the IP and port: 
 {\tt echo "toto" | nc -u IP 9999}.
 
-{\bf Watch using {\tt tcpdump -i eth1 -XXX} how the packets transfered from PC to Red Pitaya can be seen on the interface}
+{\bf Watch using {\tt tcpdump -i eth1 -XXX} how the packets transferred from PC to Red Pitaya can be seen on the interface}
 
 {\bf Share data encoded on more than 1-byte and observe the endianness issue of the byte organization between
 sender, network and receiver}
@@ -1140,15 +1140,15 @@ that an external definition of the variable {\tt CC} overrides the default compi
 the {\tt \$(MAKE) -C dir} meaning that the {\tt make} configuration file is search for in the {\tt dir} subdirectory.
 
 If the additional package is included in a new {\tt BR2\_EXTERNAL} repository, {\bf multiple external repositories}
-can be used by definiting
+can be used by defining
 
 \verb~export BR2_EXTERNAL=$HOME/oscimp_br2_external/:$HOME/redpitaya~
 
 Store library compilation output to the {\tt staging} directory (found in {\tt output/staging}) so the subsequent packages 
 can link to its output. Notice that
 \footnote{\url{https://buildroot.org/downloads/manual/manual.html}} ``staging/ is a symlink to the target toolchain sysroot inside host/, which exists for 
-backwards compatibility'' so that the actual target sysroot is located in the host directory~! (see
-{\tt output/host/arm-buildroot-linux-gnueabihf/sysroot}
+backwards compatibility'' so that the actual target sysroot is located in the host directory~! (see \\
+{\tt output/host/arm-buildroot-linux-gnueabihf/sysroot})
 
 {\bf Generate the packages needed for cross-compiling PocketSDR using Buildroot. Notice that PocketSDR is using two external git sub-modules
 which is not readily supported by Buildroot which prefers generating separate packages for {\tt libfec} and {\tt libLDPC}
@@ -1156,11 +1156,11 @@ which is not readily supported by Buildroot which prefers generating separate pa
 an archive with the git submodules in the repository. This is only available for packages downloaded with git (i.e. when LIBFOO\_SITE\_METHOD=git). 
 Note that we try not to use such git submodules when they contain bundled libraries, in which case we prefer to use those libraries from 
 their own package''}. When working in the PocketSDR directories to update Makefiles in order to make them compatible with cross-compilation,
-all changes can be saved and applied when running Buildroot compilation by executing {\tt git diff > br2\_external/package/pocketsdr/001-makefiles.patch}: the {\tt 001-makefiles.patch} will be applied by Buildroot prior to running the compilation commands.}
+all changes can be saved and applied when running Buildroot compilation by executing \\ {\tt git diff > br2\_external/package/pocketsdr/001-makefiles.patch}: the {\tt 001-makefiles.patch} will be applied by Buildroot prior to running the compilation commands.}
 
 \section{Hardware access using a C program}
 
-Accesing hardware resources from the shell is functional, but 1/ is slow since it
+Accessing hardware resources from the shell is functional, but 1/ is slow since it
 must reach through all the abstraction layer between userspace and the hardware
 including the kernel and 2/ assumes that someone before us has already implemented the 
 driver to control the hardware. We will here discuss how to control hardware without
@@ -1184,7 +1184,7 @@ peripheral will lead to a null result (0x00). The solution is provided, for an M
 which explains
 which clock to activate (bit 22 of the APER\_CLK\_CTRL register). Furthermore, remember
 that a {\tt unsigned int *h;} pointer is incremented with 4-byte steps, so that
-{\tt h+4} points towards the address of {\tt h} incremented by {\bf 16 octets} et not 4~bytes
+{\tt h+4} points towards the address of {\tt h} incremented by {\bf 16 bytes} and not 4~bytes
 as would be erroneously expected. Thus, we find easier to define {\tt unsigned char *h;} which
 avoids any surprise when incrementing addresses.
 
@@ -1276,7 +1276,7 @@ Zynq.
 Such direct memory accesses from userspace are possible -- without writing a C
 program handling the {\tt /dev/mem} interface and convert real to virtual
 addresses ({\tt mmap}) -- thanks to the {\tt devmem}
-\footnote{sources available in {\tt buildroot} at {\tt output/build/busybox-1.30.1/miscutils/devmem.c}}. 
+\footnote{sources available in {\tt buildroot} at {\tt output/build/busybox-1.30.1/miscutils/devmem.c}}
 software. Hence for example, unlocking the Zynq configuration registers can be tested with
 {\footnotesize
 \begin{verbatim}
@@ -1291,7 +1291,7 @@ redpitaya> devmem 0xf800000c             # check status: 0=unlocked
 
 \subsection{Reconfiguring pin functions -- handling hardware interrupts}
 
-The Red Pitaya only provides two GPIO controled from the PS -- the MIOs -- to which LEDs are connected.
+The Red Pitaya only provides two GPIO controlled from the PS -- the MIOs -- to which LEDs are connected.
 These pins are hence not usable as inputs or for any other use than visual information. Other
 MIO pins are available, but their default configuration ({\tt ps7\_init.c} file generated by Vivado or provided 
 with the Linux kernel for starting the system) is dedicated to alternative functions (SPI, UART).
@@ -1333,7 +1333,7 @@ alternate the pin state.
 \begin{center}
 \includegraphics[width=0.49\linewidth]{Extension_connector.png}
 \end{center}
-\caption{Redpitaya extention port pinout, from {\tt https://redpitaya.readthedocs.io/en/latest/developerGuide/hardware/125-14/extent.html}. MIO10 is indicated here as SPI\_MOSI or pin 3 of E2.}
+\caption{Redpitaya extention port pinout, from {\tt https://redpitaya.readthedocs.io/en/latest/developerGuide/\\hardware/125-14/extent.html}. MIO10 is indicated here as SPI\_MOSI or pin 3 of E2.}
 \label{pinout}
 \end{figure}
 
@@ -1343,7 +1343,7 @@ the GPIO is the same than the one we provided earlier to {\tt /sys/class/gpio}, 
 
 \lstinputlisting[language=C]{programs/4mymod_version_gpiolib.c}
 
-Similary, this pin can trigger an asynchronous event (interrupt) its its voltage
+Similarly, this pin can trigger an asynchronous event (interrupt) its its voltage
 changes. An interrupt is handled in the sample kernel module as follows:
 
 \lstinputlisting[language=C]{programs/5mymod_int.c}
@@ -1398,7 +1398,7 @@ Direct Memory Access or interrupts, are just not accessible outside the kernel.
 When configuring the kernel, selecting a module is achieved by setting to
 {\tt M} such options when running {\tt make menuconfig}. Compiling modules
 is completed with {\tt make modules} followed by {\tt make modules\_install} 
-which copies the copilation result to {\tt /var/lib/modules}.
+which copies the compilation result to {\tt /var/lib/modules}.
 
 These options are accessed when using buildroot by executing {\tt make linux-menuconfig}
 so that Buildroot's {\tt make} will compile both kernel and modules, and store the
@@ -1408,7 +1408,7 @@ Any driver developer must understand the architecture of a kernel module in orde
 provide the interfaces expected by a user willing to access hardware without understanding
 the details of hardware configuration.
 
-The two classes of kernel modules are designed for transfering data blocks (for example
+The two classes of kernel modules are designed for transferring data blocks (for example
 to a mass storage interface such as a hard disk), or as individual bytes
 \footnote{\url{https://appusajeev.wordpress.com/2011/06/18/writing-a-linux-character-device-driver/}} 
 We will focus on the latter, easier to grasp and meeting most sensor applications while
@@ -1428,7 +1428,7 @@ skeleton and become familiar with the Linux kernel tree structure on the one han
 method through a {\tt Makefile} requesting methods associated with the kernel being run on the target
 platform.
 
-A minimalisting kernel module is provided below, for becoming familiar with the initialization
+A minimalistic kernel module is provided below, for becoming familiar with the initialization
 function and compilation mechanism as well as linking the module with the kernel.
 
 \begin{lstlisting}[language=C,label=code1,caption={First example of kernel module}]
@@ -1529,8 +1529,8 @@ located: here we are considering the working directory so that
 %* ici on cross-compile pour cible ARM, donc on ajoute les deux argument ARCH= et CROSS_COMPILE=
 %* finalement, le Makefile de Linux veut savoir ou` se trouvent les sources du noyau en cours de 
 %compilation : c'est le repertoire courant donc M=$(PWD)
-\noindent{\fbox{{\parbox{\linewidth}{A kernel module is no only compiled to the embedded target
-board, but also possibly to the host as long as low-lever hardware is not accessed. In order
+\noindent{\fbox{{\parbox{\linewidth}{A kernel module is not only compiled to the embedded target
+board, but also possibly to the host as long as low-level hardware is not accessed. In order
 to know the kernel version running on the PC, run the {\tt uname -a} command. Make sure the kernel
 sources are available, or at least the associated headers and configuration, for example with
 the package {\tt linux-headers-amd64} when using Debian GNU/Linux. On the PC, the Makefile will look like
@@ -1569,7 +1569,7 @@ of modules linked to the kernel is displayed with {\tt lsmod}. The messages from
 are displayed on the console (in the case of the Red Pitaya, on the serial port) or in the kernel logs displayed
 with {\tt dmesg} or {\tt cat /var/log/messages} (or {\tt /var/log/syslog}).
 
-The result of the kernel module compilation is transfered to the Red Pitaya board (NFS or {\tt scp})
+The result of the kernel module compilation is transferred to the Red Pitaya board (NFS or {\tt scp})
 to be linked to the kernel with {\tt insmod mymod.ko}. We validate that the command was
 acknowledged by displaying the log messages with {\tt dmesg}:
 
@@ -1599,7 +1599,7 @@ with a character device interface ({\em char device}).
 
 A module only able to load and unload is hardly usable. In order to interact with the user, we must
 provide methods for reading or writing. The standard location of the pseudo-files allowing such
-interaction between the kernel and userpace is in the {\tt /dev} directory. These files act as
+interaction between the kernel and userspace is in the {\tt /dev} directory. These files act as
 pipes between the two spaces (kernel and user) through which single bytes (characters) are shared 
 (as opposed to data blocks). The administrator (root or {\tt sudo} on the host PC) can create such 
 pseudo-files using the command {\tt mknod /dev/jmf c 90 0} with the arguments indicating that we are creating 
@@ -1615,7 +1615,7 @@ entries in {\tt /dev}, the list of peripherals in {\tt /proc/devices} will provi
 already allocated to kernel modules. For example on the Red Pitaya, major number 90 is allocated to the
 {\tt mtd} module. On a host PC, the 99 major number is allocated to {\tt ppdev}.}}
 
-The structure defining which function is called when a system call is transfered from userspace to kernel
+The structure defining which function is called when a system call is transferred from userspace to kernel
 space (function pointer) when opening or closing the pipe ({\tt open} and {\tt close} in userspace) as well
 as reading and writing data through the pipe ({\tt write} and {\tt read} system calls from userspace
 respectively) is name {\tt file\_operations}.
@@ -1740,7 +1740,7 @@ The major number remains constant for all files related to a given type of perip
 minor number indexes which peripheral is considered by being incremented for each new instance.
 We check that the association of the communication peripheral with the module is correct by reading
 {\tt /proc/devices} which includes the {\tt jmf} entry associated with the major number we selected.
-(90, which is free as verified with {\tt ls -l /dev/}). However, the {\tt /dev/} is ofter dynamically
+(90, which is free as verified with {\tt ls -l /dev/}). However, the {\tt /dev/} is often dynamically
 generated during the boot sequence, and any new entry will have to be recreated after a reboot sequence.
 
 An alternate solution to explicitly providing the communication entry in {\tt /dev} by manually selecting
@@ -1764,8 +1764,8 @@ which is concluded in the exit function with
 \subsection{The {\tt ioctl} system call}
 
 After defining the systems calls matching the requirement that all peripherals must
-appear as files, it occured that one more system call had to be added that breaks this
-initial unix design philosophy: this new system call is called {\tt ioctl} for input/output
+appear as files, it occurred that one more system call had to be added that breaks this
+initial Unix design philosophy: this new system call is called {\tt ioctl} for input/output
 control. This system call has been added to complement functionalities that cannot be solved
 with just {\tt read} and {\tt write}, namely configuration of the peripherals (for example,
 tuning the sampling rate or the data size of a sound card).
@@ -1859,7 +1859,7 @@ From a user perspective, the {\tt ioctl()} function is called exactly as
 {\tt read()} or {\tt write()} would be, but will handle 3~arguments: the file descriptor, the
 ioctl index (consistent with the declaration of the kernel module, here 0 or 1) and possibly
 an argument. The second page of the {\tt ioctl} manual is clear about these aspects. From the
-kernel side, transfering arguments \footnote{\url{http://www.makelinux.net/ldd3/chp-6-sect-1}} 
+kernel side, transferring arguments \footnote{\url{http://www.makelinux.net/ldd3/chp-6-sect-1}} 
 towards userspace memory addresses requires using {\tt put\_user()} for a single scalar value
 or {\tt copy\_to\_user} for an array (memory area from kernel space to user space).
 
@@ -1870,8 +1870,8 @@ Memory Management Unit -- MMU -- a multitasking operating system such as Linux b
 significantly from the use of such a peripheral and justifies the selection of a microcontroller
 powerful enough to be fitted with an MMU. Memory organization, handled by the MMU, should not
 be cared of by the developer as long as memory allocation and access remain consistent,
-{\em except} when accessing a known physical memory location, as for exemple required when 
-reaching hardware configuration registers. In that cas, we must perform the reverse conversion,
+{\em except} when accessing a known physical memory location, as for example required when 
+reaching hardware configuration registers. In that case, we must perform the reverse conversion,
 from the virtual memory representation to the real physical addressing. From a userspace perspective,
 such a functionality is provided by {\tt mmap()}. From the kernel space, it is {\tt ioremap()}.
 
@@ -1879,14 +1879,15 @@ Electronics engineers are only aware of physical addresses for reaching a periph
 the address associated with each register in the microcontroller datasheet. The computer
 scientist only knows virtual addresses, as handled by the operating system running on top of the
 MMU. We must provide a link between these two worlds in order to let the communicate.
+% Previous paragraph : to let the ??? communicate ?
 
-At the kernel leve, the instruction \cite[chap.9]{ldd3} in charge of this link is
+At the kernel level, the instruction \cite[chap.9]{ldd3} in charge of this link is
 {\tt void *ioremap(unsigned long phys\_addr, unsigned long size);}
 
 We will illustrate its use by complementing the methods called when inserting a module
 to switch on a LED, and switch off the LED when the module is removed from memory. This example
 is for demonstration purposes only since in a practical application, the module
-{\tt linux-*/drivers/gpio/gpio-xilinx.c} implements such functionalities, hiding the subtelties
+{\tt linux-*/drivers/gpio/gpio-xilinx.c} implements such functionalities, hiding the subtleties
 of hardware access from the developer.
 
 The resources needed to understand the organization of the registers needed to configure
@@ -2048,8 +2049,8 @@ down (&mysem);
 up (&mysem); 
 \end{lstlisting}
 
-{\bf Simulate the priodic production of datasets leading to the increment of the semaphore in
-a timer handler. Block the call to {\tt read} as long as datasets have not been procduced.}
+{\bf Simulate the periodic production of datasets leading to the increment of the semaphore in
+a timer handler. Block the call to {\tt read} as long as datasets have not been produced.}
 
 {\bf What happens when reading from a peripheral accessible in the {\tt /dev/} entry when the
 semaphore has already incremented multiple times?}
@@ -2078,7 +2079,7 @@ the task sleep frees some processor resources, but requires changing context whi
 lengthy and requiring significant processing resources if the read and write operations should be
 perform with short latencies. An alternative solution is the spinlock, which operates similarly but
 keeps the task in an active state by continuously probing the state of the lock: in this case,
-the processor is continuously active, mais le latency is lowered and no context change is needed.
+the processor is continuously active, but the latency is lowered and no context change is needed.
 
 The definitions of constants and prototypes of mutexes are as summarized with
 \begin{lstlisting}[language=C]
@@ -2295,11 +2296,13 @@ MODULE_DEVICE_TABLE(of, simple_driver_of_match);
 \end{verbatim}
 }
 
+% Following paragraph : the {\tt modules.alias.bin} found in the {\tt /lib/modules/VER/} directory of the Red Pitaya running Linux version {\tt VER} ??? but ??? be filled
+running Linux version {\tt VER} but be filled
 \noindent the driver should be loaded at boot time. However, for the Linux kernel to be
 aware of the link between the kernel module name and the associated {\tt compatible} keyword,
 the {\tt modules.alias.bin} found in the {\tt /lib/modules/VER/} directory of the Red Pitaya
 running Linux version {\tt VER} but be filled. To generated this binary file and the associated
-humand readable {\tt modules.alias} files, the following step are used, assuming the Buildroot
+human readable {\tt modules.alias} files, the following step are used, assuming the Buildroot
 cross-compilation toolchain is locate in {\tt \$BR}:
 \begin{enumerate}
 \item copy the compile {\tt .ko} kernel module in {\tt \$BR/output/target/lib/modules/VER/kernel/drivers}, e.g. \\
@@ -2315,7 +2318,7 @@ associated with the {\tt file.ko} kernel module
 specifically the {\tt module.*} and the {\tt .ko} files.
 \end{enumerate}
 
-If instead of modfying the devicetree source, compiling and rebooting we wish to use a devicetree
+If instead of modifying the devicetree source, compiling and rebooting we wish to use a devicetree
 overlay, the following overlay source
 
 {\footnotesize
@@ -2438,7 +2441,8 @@ redpitaya> insmod /tmp/0mymod.ko
 [New Thread 190]
 [Switching to Thread 192]
  
-Thread 69 hit Breakpoint 1, find_module_sections (info=0xe0929ef0, mod=<optimized out>) at kernel/module/main.c:2104
+Thread 69 hit Breakpoint 1, find_module_sections (info=0xe0929ef0, mod=<optimized out>) at
+	kernel/module/main.c:2104
 2104            mod->kp = section_objs(info, "__param",
 \end{verbatim}
 
@@ -2465,6 +2469,7 @@ Thread 67 hit Breakpoint 2.2, hello_end () at .../0mymod.c:6
 % debug symbols:
 % https://stackoverflow.com/questions/28298220/kernel-module-no-debugging-symbols-found
 
+% Twice Linux ???
 \section{Compiling a Linux image Linux with Xenomai support (real-time extension but no DTBO 
 support)}\label{xe}
 
@@ -2493,7 +2498,7 @@ and after exporting the {\tt BR2\_EXTERNAL} variable towards the {\tt redpitaya}
 run the {\tt make redpitaya\_xenomai\_defconfig} command to load the configuration, which is
 then applied during the compilation with {\tt make}. As before, after quite some time and
 additional storage space use, the resulting image is located in {\tt output/images} and is
-transfered to the SD card with the appropriate {\tt dd} command.
+transferred to the SD card with the appropriate {\tt dd} command.
 
 In case the FPGA (PL) of the Zynq is to be used, make sure to activate its support in the kernel
 with {\tt make linux-menuconfig} and after searching for FPGA, select {\em FPGA Configuration 
@@ -2638,10 +2643,10 @@ RTD|     -2.870|     -2.358|      7.046|       0|     0|     -2.870|      7.931
 RTD|     -2.883|     -2.388|      8.137|       0|     0|     -2.883|      8.137
 \end{verbatim}
 
-Negative values -- meaningless -- are documented at
+Negative values -- meaningless -- are documented at \\
 \url{https://embeddedgreg.com/2017/07/16/getting-started-with-xenomai-3-on-zynq/comment-page-1/} 
 and we indeed find on the Red Pitaya the pseudo-filesystem {\tt /proc/xenomai}, as well as the
-{\tt autotune} tool in {\tt /tmp/xeno\_zynq/usr/xenomai/sbin} used for tuning the system
+{\tt autotune} tool in \\{\tt /tmp/xeno\_zynq/usr/xenomai/sbin} used for tuning the system
 parameters \footnote{{\tt autotune --period 10000}}, in order to finally achieve a meaningful
 result:
 \begin{verbatim}
@@ -2680,7 +2685,7 @@ stable despite the resources requested by this program.
 \item check on your system that the real time options have been activated, and most significantly
 the associated tools ({\em testsuite} and {\tt rt-tests}). Achieving this result requires
 activating {\tt Target packages} $\rightarrow$ {\tt Real-Time} $\rightarrow$ {\tt Xenomai Userspace} 
-$\rightarrow$ {\tt Install testsuite}. Furthermire, manually select the Xenomai version by filling
+$\rightarrow$ {\tt Install testsuite}. Furthermore, manually select the Xenomai version by filling
 the {\tt Custom Xenomai version} field with {\tt 3.0.5},
 \item some additional shell tools might be wisely added, for example {\tt screen} in {\tt Target 
 packages} $\rightarrow$ {\tt Shell and utilities} $\rightarrow$ {\tt screen} or {\tt Target 
@@ -2758,6 +2763,7 @@ sessions).
 
 \section{Latency qualification}
 
+% Next paragraph : Does ``explicited'' exist in English ???
 The four examples explicited below investigate how different delays between toggling
 LED state either by calling the {\tt sleep} function (active delay), or by calling a timer
 callback function. Without Xenomai, calling signal callbacks leads to the worst stability
@@ -2789,7 +2795,7 @@ Unloaded
 This program follows the previous example seen earlier of toggling LED state, with a 500~ms delay.
 In this and all the following examples, the processor is loaded with the following command executed in
 a second terminal on the Red Pitaya:
-\verb~stress --cpu 8 --io 4 --vm 2 --vm-bytes 128M --timeout 10s~ executed 5 times in a raw for a total
+\verb~stress --cpu 8 --io 4 --vm 2 --vm-bytes 128M --timeout 10s~ executed 5 times in a row for a total
 measurement duration of about a minute.
 
 \subsection{Delay using a timer, without Xenomai}
@@ -2856,6 +2862,7 @@ Unloaded
 
 \section{FPGA configuration}
 
+% Next paragraph : accessined ???
 While a classical FPGA requires a dedicated framework for configuration (e.g. JTAG probe),
 the Zynq allows accessined the Programmable Logic part (PL) of the chip from its general
 purpose Processing System (PS). 
@@ -2961,10 +2968,10 @@ Hence, we know how to access each PL peripheral function from the PS as we would
 
 \subsection{XADC}
 
-The Zynq is fitted with a slow analog to digital converter. his peripheral can be accessed
+The Zynq is fitted with a slow analog to digital converter. This peripheral can be accessed
 either from the PS, or from the PL. Xilinx provides an IIO compatible driver as expected for
 such a peripheral. Without dedicated configuration of the PL, only the temperature can be read
-this way. We here wish to extend such PL functionalitites by updating the PL configuration to
+this way. We here wish to extend such PL functionalities by updating the PL configuration to
 configure two pins for analog voltage measurements.
 
 \begin{figure}[h!tb]
@@ -3021,8 +3028,8 @@ The devicetree overlay for communicating with this new configuration of the XADC
 }
 
 which overloads the {\tt \&adc} entry already present in the Red Pitaya devicetree. The organization
-and options of the Xilinx driver for the ADC are descibed in the kernel documentation at
-{\tt Documentation/devcietree/bindings/iio/adc/xilinx-xadc.txt}. We indeed find in
+and options of the Xilinx driver for the ADC are descibed in the kernel documentation at \\
+{\tt Documentation/devcietree/bindings/iio/adc/xilinx-xadc.txt}. We indeed find in \\
 {\tt arch/arm/boot/dts/xilinx/zynq-7000.dtsi} of the kernel sources the configuration of a Zynq-7000 with
 its ADC entry:
 \begin{verbatim}
@@ -3045,19 +3052,12 @@ xilinx-xadc-core.c:     { .compatible = "xlnx,zynq-xadc-1.00.a", (void *)&xadc_z
 \end{verbatim}
 which is indeed stored with other IIO drivers.
 
-The base address of the XADC connected to the PS is documented at page 1160 of \url{ug585-Zynq-7000.pdf}: the
-registers for configuring the XADC from the PS are located at addresses starting at 0xf8007100. In order to 
-comply with the XADC address organization in the bitstream et describe this organization in the devicetree when
-loading the IIO driver, we must compile the {\tt xilinx\_xadc.ko} driver as a module (as opposed to a static
-link into the kernel). 
+The base address of the XADC connected to the PS is documented at page 1160 of \url{ug585-Zynq-7000.pdf}: the registers for configuring the XADC from the PS are located at addresses starting at 0xf8007100. In order to comply with the XADC address organization in the bitstream and describe this organization in the devicetree when loading the IIO driver, we must compile the {\tt xilinx\_xadc.ko} driver as a module (as opposed to a static link into the kernel). 
 % recompiler le driver XADC en MODULE afin de le recharger avec la nouvelle config fournie dans le dts
 % make linux && make
 Once loaded, the IIO peripheral is accessible at {\tt /sys/bus/iio/devices/iio:device0}.
 
-The \url{Red_Pitaya_Schematics_STEM_125-10_V1.0.pdf} schematic describes the relation between the information
-screen printed on the printed circuit board and the Zynq pin names and their functions: AI0 is connected to 
-AD8, AI1 is connected to AD0, AI2 is connected to AD1 and AI3 is connected to AD9, which helps understanding
-the naming chosen in the IIO driver:
+The \url{Red_Pitaya_Schematics_STEM_125-10_V1.0.pdf} schematic describes the relation between the information screen printed on the printed circuit board and the Zynq pin names and their functions: AI0 is connected to AD8, AI1 is connected to AD0, AI2 is connected to AD1 and AI3 is connected to AD9, which helps understanding the naming chosen in the IIO driver:
 
 \begin{minipage}[t]{\linewidth}
 \begin{minipage}{.49\linewidth}
@@ -3282,7 +3282,7 @@ Magazine France Hors S\'erie 87 (Nov.--D\'ec. 2016)
 \section*{Activating the X11 server}\label{VGA}
 
 The Red Pitaya is not fitted with a graphical interface port. Nevertheless,
-graphical applications can be execued, thanks to a X11 server running on the
+graphical applications can be executed, thanks to a X11 server running on the
 Red Pitaya and displaying on the client running on the PC (X11 swaps the usual
 convention of server and client naming convention).
 
@@ -3388,21 +3388,21 @@ is compiled to a binary executable with {\tt make}.
 
 Once the compilation has been completed, two results are obtained:
 \begin{itemize}
-\item the GNU/Linux image (rootfs) for the ARM target including the Qt libraries,orte les 
+\item the GNU/Linux image (rootfs) for the ARM target including the Qt libraries.
 \item the host (PC) now has the Qt tools for configuring and cross-compiling Qt5 
 programs written in C++ and calling Qt libraries.
 \end{itemize}
 
 The program is executed on the Red Pitaya platform by specifying the graphical output,
-here {\em xcb}: after transfering the binary excecutable to the Red Pitaya target
+here {\em xcb}: after transferring the binary executable to the Red Pitaya target
 platform, we execute {\tt Qt -platform xcb} and, if all goes well, a window with a text editor
 should be displayed (Fig. \ref{texte}, bottom)
 
 % penser a nommer son fichier.cpp et non .c
 
-Once the procedure for compiling a program has been understood, the Qt langage and libraries
+Once the procedure for compiling a program has been understood, the Qt language and libraries
 are documented with many examples given in the archive at {\tt 
-\$BR/output/build/qt5base-5.*/examples}. We have hence checked that the exemples
+\$BR/output/build/qt5base-5.*/examples}. We have hence checked that the examples
 {\tt gui/analogclock} or {\tt widgets/digitalclock} are working properly (Fig. \ref{qtex}). 
 
 \begin{figure}[h!tb]
@@ -3413,7 +3413,7 @@ are documented with many examples given in the archive at {\tt
 \end{center}
 \caption{Left: the {\tt analogclock} example. Right: the
 {\tt digitalclock} example. Both examples are found in {\tt 
-/usr/lib/qt/examples/}, and are executed on the {\tt xcb} plarform specified
+/usr/lib/qt/examples/}, and are executed on the {\tt xcb} platform specified
 with the {\tt -plateform} argument when running the executable.}
 \label{qtex}
 \end{figure}
